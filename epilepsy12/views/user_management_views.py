@@ -18,10 +18,10 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.utils.html import strip_tags
 from django_htmx.http import HttpResponseClientRedirect
 
-
 # Other dependencies
 from two_factor.views import LoginView as TwoFactorLoginView
 import pandas as pd
+from datetime import datetime, timedelta
 
 # epilepsy12
 from ..models import Epilepsy12User, Organisation, VisitActivity, Site
@@ -563,6 +563,7 @@ class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
         " If you don't receive an email, "
         "please make sure you've entered the address you registered with, and check your spam folder."
     )
+    extra_email_context= { "reset_password_link_expires_at": datetime.now() + timedelta(seconds=settings.PASSWORD_RESET_TIMEOUT) }
     success_url = reverse_lazy("index")
 
     # extend form_valid to set user.password_last_set
@@ -692,6 +693,7 @@ def all_epilepsy12_users_list(request, organisation_id):
         request.user.is_superuser or request.user.groups.filter(name__in=allowed_groups)
     ):
         raise PermissionDenied()
+
 
     all_users = Epilepsy12User.objects.all().values()
 

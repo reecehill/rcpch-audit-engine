@@ -84,6 +84,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.admindocs",
+    "django.contrib.humanize",
     "rest_framework",
     "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
